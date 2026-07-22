@@ -1,4 +1,4 @@
-package com.chatop.api.configuration;
+package com.chatop.api.services;
 
 import java.util.Collections;
 
