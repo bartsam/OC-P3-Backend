@@ -4,6 +4,16 @@
       "name": "app.cors.allowed-origins",
       "type": "java.lang.String",
       "description": "Authorised origin for CORS requests"
+    },
+    {
+      "name": "app.upload.dir",
+      "type": "java.lang.String",
+      "description": "Directory name for uploads"
+    },
+    {
+      "name": "app.upload.base-url",
+      "type": "java.lang.String",
+      "description": "Base URL for uploads"
     }
   ]
 }

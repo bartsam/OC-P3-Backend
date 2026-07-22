@@ -11,12 +11,9 @@ public class UserResponseDto {
   private int id;
   private String name;
   private String email;
-
   @JsonFormat(pattern = "yyyy/MM/dd")
   @JsonProperty("created_at")
-
   private LocalDateTime createdAt;
-
   @JsonFormat(pattern = "yyyy/MM/dd")
   @JsonProperty("updated_at")
   private LocalDateTime updatedAt;
