@@ -1,5 +1,7 @@
 package com.chatop.api.services;
 
+import java.time.LocalDateTime;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,17 +26,31 @@ public class UserService {
    * Crée un nouveau user en base
    * Lève une exception si email existant
    * Mot de passe encodé avec BCrypt
+   * createdAt et updatedAt initialisés à la date courante
    */
   public UserEntity register(String name, String email, String rawPassword) {
     if (userRepository.existsByEmail(email)) {
       throw new IllegalArgumentException("Email already use");
     }
 
+    LocalDateTime now = LocalDateTime.now();
+
     UserEntity user = new UserEntity();
     user.setName(name);
     user.setEmail(email);
     user.setPassword(passwordEncoder.encode(rawPassword));
+    user.setCreatedAt(now);
+    user.setUpdatedAt(now);
 
+    return userRepository.save(user);
+  }
+
+  /**
+   * Met à jour un user existant
+   * Rafraîchi updatedAt
+   */
+  public UserEntity update(UserEntity user) {
+    user.setUpdatedAt(LocalDateTime.now());
     return userRepository.save(user);
   }
 
