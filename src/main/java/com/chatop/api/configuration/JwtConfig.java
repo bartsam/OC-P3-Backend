@@ -20,7 +20,7 @@ import com.nimbusds.jose.jwk.source.ImmutableSecret;
 public class JwtConfig {
 
   // Clé secrète JWT chargée depuis local.properties
-  @Value("${app.jwt.key}")
+  @Value("${jwt.secret}")
   private String jwtKey;
 
   /**

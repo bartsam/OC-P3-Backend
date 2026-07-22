@@ -11,28 +11,33 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
+/**
+ * Génère les tokens JWT remis aux user après authentification réussie.
+ */
 @Service
 public class JWTService {
 
-  // Encoder defined in SpringSecurityConfig, signs tokens with shared secret key
+  // Encodeur signe les tokens avec une clé secrète partagée
   private JwtEncoder jwtEncoder;
 
   public JWTService(JwtEncoder jwtEncoder) {
     this.jwtEncoder = jwtEncoder;
   }
 
-  // Builds and signs a JWT for the given authenticated user
+  /**
+   * Construit et signe un JWT pour l'user authentifié (subject et durée)
+   */
   public String generateToken(Authentication authentication) {
     Instant now = Instant.now();
 
-    // Claims: JWT payload fields (issuer, timestamps, subject = username)
+    // Claims : contenu (payload) du JWT
     JwtClaimsSet claims = JwtClaimsSet.builder()
-        .issuer("self")
-        .issuedAt(now)
-        .expiresAt(now.plus(1, ChronoUnit.DAYS))
-        .subject(authentication.getName()).build();
+        .issuer("self") // identifie l'app comme émetteur du token
+        .issuedAt(now) // date de création du token
+        .expiresAt(now.plus(1, ChronoUnit.DAYS)) // date d'expiration (1j après création)
+        .subject(authentication.getName()).build(); // id de l'user authentifié (email)
 
-    // Combines claims with the signing MacAlgorithm.HS256 to produce the token
+    // Assemble claims et l'algorithme de signature HS256 pour encodage du token
     JwtEncoderParameters jwtEncoderParameters = JwtEncoderParameters.from(JwsHeader.with(MacAlgorithm.HS256).build(),
         claims);
 
