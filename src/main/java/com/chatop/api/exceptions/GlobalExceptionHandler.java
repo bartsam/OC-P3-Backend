@@ -2,6 +2,8 @@ package com.chatop.api.exceptions;
 
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -18,11 +20,14 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+  private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
   /**
    * Mauvais credentials lors du login → 401
    */
   @ExceptionHandler(BadCredentialsException.class)
-  public ResponseEntity<Map<String, String>> handleBadCredentials() {
+  public ResponseEntity<Map<String, String>> handleBadCredentials(BadCredentialsException ex) {
+    logger.warn("Authentication failed: {}", ex.getMessage());
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
         .body(Map.of("message", "error"));
   }
@@ -32,15 +37,17 @@ public class GlobalExceptionHandler {
    */
   @ExceptionHandler(ResourceNotFoundException.class)
   public ResponseEntity<Map<String, String>> handleNotFound(ResourceNotFoundException ex) {
+    logger.info("Resource not found: {}", ex.getMessage());
     return ResponseEntity.status(HttpStatus.NOT_FOUND)
         .body(Map.of("message", ex.getMessage()));
   }
 
   /**
-   * Utilisateur authentifié mais non autorisé à effectuer l'action
+   * Utilisateur authentifié mais non autorisé à effectuer l'action → 401
    */
   @ExceptionHandler(AccessDeniedException.class)
-  public ResponseEntity<Map<String, String>> handleAccessDenied() {
+  public ResponseEntity<Map<String, String>> handleAccessDenied(AccessDeniedException ex) {
+    logger.warn("Access denied: {}", ex.getMessage());
     return ResponseEntity.status(HttpStatus.FORBIDDEN)
         .body(Map.of("message", "Access denied"));
   }
@@ -51,6 +58,7 @@ public class GlobalExceptionHandler {
    */
   @ExceptionHandler(IllegalArgumentException.class)
   public ResponseEntity<Map<String, String>> handleIllegalArgument(IllegalArgumentException ex) {
+    logger.info("Invalid argument: {}", ex.getMessage());
     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
         .body(Map.of("message", ex.getMessage()));
   }
@@ -61,6 +69,7 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<Map<String, String>> handleValidationErrors(MethodArgumentNotValidException ex) {
     String message = ex.getBindingResult().getFieldErrors().get(0).getDefaultMessage();
+    logger.info("Validation error: {}", message);
     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
         .body(Map.of("message", message));
   }
@@ -69,18 +78,10 @@ public class GlobalExceptionHandler {
    * Corps de requête mal formé (JSON invalide, body vide, incompatible) → 400
    */
   @ExceptionHandler(HttpMessageNotReadableException.class)
-  public ResponseEntity<Map<String, String>> handleMalformedJson() {
+  public ResponseEntity<Map<String, String>> handleMalformedJson(HttpMessageNotReadableException ex) {
+    logger.info("Invalid request body: {}", ex.getMessage());
     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
         .body(Map.of("message", "Invalid request body"));
-  }
-
-  /**
-   * Toute erreur imprévue non gérée explicitement par les autres handlers → 500
-   */
-  @ExceptionHandler(Exception.class)
-  public ResponseEntity<Map<String, String>> handleGeneric(Exception ex) {
-    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .body(Map.of("message", "An internal error has occurred"));
   }
 
   /**
@@ -88,7 +89,18 @@ public class GlobalExceptionHandler {
    */
   @ExceptionHandler(FileStorageException.class)
   public ResponseEntity<Map<String, String>> handleFileStorage(FileStorageException ex) {
+    logger.error("File storage failed", ex);
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
         .body(Map.of("message", "Failed to save the file"));
+  }
+
+  /**
+   * Toute erreur imprévue non gérée explicitement par les autres handlers → 500
+   */
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<Map<String, String>> handleGeneric(Exception ex) {
+    logger.error("Unexpected error occurred", ex);
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .body(Map.of("message", "An internal error has occurred"));
   }
 }
