@@ -46,11 +46,11 @@ public class RentalEntity {
   @OneToMany(mappedBy = "rental", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<MessageEntity> messages;
 
-  public int getId() {
+  public Integer getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 

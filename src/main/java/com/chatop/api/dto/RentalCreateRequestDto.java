@@ -4,7 +4,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.constraints.NotNull;
 
-public class RentalsRequestDto {
+public class RentalCreateRequestDto {
 
   @NotNull(message = "Name required")
   private String name;

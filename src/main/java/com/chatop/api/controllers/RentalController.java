@@ -8,11 +8,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.chatop.api.dto.RentalsRequestDto;
+import com.chatop.api.dto.RentalCreateRequestDto;
+import com.chatop.api.dto.RentalUpdateRequestDto;
 import com.chatop.api.dto.RentalsResponseDto;
 import com.chatop.api.models.RentalEntity;
 import com.chatop.api.models.UserEntity;
@@ -37,17 +40,32 @@ public class RentalController {
   }
 
   /**
-   * Crée un nouveau rental associé au user connecté
+   * Crée un nouveau rental associé à l'user connecté
    */
   @PostMapping(value = "/rentals", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<Map<String, String>> createRental(
-      @Valid @ModelAttribute RentalsRequestDto rentalRequestDto,
+      @Valid @ModelAttribute RentalCreateRequestDto rentalCreateRequestDto,
       Authentication authentication) {
 
     UserEntity currentUser = userService.getByEmail(authentication.getName());
-    rentalService.saveRental(rentalRequestDto, currentUser.getId());
+    rentalService.saveRental(rentalCreateRequestDto, currentUser.getId());
 
     return ResponseEntity.ok(Map.of("message", "Rental created !"));
+  }
+
+  /**
+   * Update un rental associé à l'user connecté
+   */
+  @PutMapping(value = "/rentals/{rentalId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public ResponseEntity<Map<String, String>> updateRental(
+      @PathVariable Integer rentalId,
+      @Valid @ModelAttribute RentalUpdateRequestDto rentalUpdateRequestDto,
+      Authentication authentication) {
+
+    UserEntity currentUser = userService.getByEmail(authentication.getName());
+    rentalService.updateRental(rentalId, rentalUpdateRequestDto, currentUser.getId());
+
+    return ResponseEntity.ok(Map.of("message", "Rental updated !"));
   }
 
   /**
