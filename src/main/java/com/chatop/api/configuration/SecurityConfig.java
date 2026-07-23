@@ -57,7 +57,8 @@ public class SecurityConfig {
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         // Définis les routes publiques : register, login et docs Swagger
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
+            .requestMatchers("/api/auth/**").permitAll()
+            .requestMatchers("/images/**").permitAll()
             .requestMatchers("/swagger-ui/**", "/swagger-ui").permitAll()
             .anyRequest().authenticated())
         // Déclenche l'authentification avec token JWT sur les routes protégées
