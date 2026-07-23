@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+import com.chatop.api.exceptions.JwtAuthenticationEntryPoint;
 import com.chatop.api.services.CustomUserDetailsService;
 
 /**
@@ -32,11 +33,13 @@ public class SecurityConfig {
 
   private final CustomUserDetailsService customUserDetailsService;
   private final CorsConfigurationSource corsConfigurationSource;
+  private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
   public SecurityConfig(CustomUserDetailsService customUserDetailsService,
-      CorsConfigurationSource corsConfigurationSource) {
+      CorsConfigurationSource corsConfigurationSource, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) {
     this.customUserDetailsService = customUserDetailsService;
     this.corsConfigurationSource = corsConfigurationSource;
+    this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
   }
 
   /**
@@ -58,7 +61,11 @@ public class SecurityConfig {
             .requestMatchers("/swagger-ui/**", "/swagger-ui").permitAll()
             .anyRequest().authenticated())
         // Déclenche l'authentification avec token JWT sur les routes protégées
-        .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
+        .oauth2ResourceServer(oauth2 -> oauth2
+            // Active la validation des tokens JWT (signature, expiration)
+            .jwt(Customizer.withDefaults())
+            // Personnalise la réponse 401 renvoyée quand l'authentification JWT échoue
+            .authenticationEntryPoint(jwtAuthenticationEntryPoint))
         .build();
   }
 
