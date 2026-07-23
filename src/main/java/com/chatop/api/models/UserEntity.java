@@ -18,7 +18,7 @@ public class UserEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int id;
+  private Integer id;
 
   @Column(unique = true, nullable = false)
   private String email;
@@ -36,6 +36,9 @@ public class UserEntity {
 
   @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<RentalEntity> rentals;
+
+  @OneToMany(mappedBy = "user")
+  private List<MessageEntity> messages;
 
   public int getId() {
     return id;

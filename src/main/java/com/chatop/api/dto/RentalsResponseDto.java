@@ -7,17 +7,26 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class RentalsResponseDto {
-  private int id;
+
+  private Integer id;
+
   private String name;
+
   private Integer surface;
+
   private Integer price;
+
   private String picture;
+
   private String description;
+
   @JsonProperty("owner_id")
   private int ownerId;
+
   @JsonFormat(pattern = "yyyy/MM/dd")
   @JsonProperty("created_at")
   private LocalDateTime createdAt;
+
   @JsonFormat(pattern = "yyyy/MM/dd")
   @JsonProperty("updated_at")
   private LocalDateTime updatedAt;

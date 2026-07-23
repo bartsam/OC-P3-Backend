@@ -8,12 +8,16 @@ public class RentalsRequestDto {
 
   @NotNull(message = "Name required")
   private String name;
+
   @NotNull(message = "Surface required")
   private Integer surface;
+
   @NotNull(message = "Price required")
   private Integer price;
+
   @NotNull(message = "Description required")
   private String description;
+
   @NotNull(message = "Picture required")
   private MultipartFile picture;
 

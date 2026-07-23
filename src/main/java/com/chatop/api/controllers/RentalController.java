@@ -40,7 +40,7 @@ public class RentalController {
    * Crée un nouveau rental associé au user connecté
    */
   @PostMapping(value = "/rentals", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity<Map<String, String>> create(
+  public ResponseEntity<Map<String, String>> createRental(
       @Valid @ModelAttribute RentalsRequestDto rentalRequestDto,
       Authentication authentication) {
 
@@ -54,7 +54,7 @@ public class RentalController {
    * Retourne la liste de tous les rentals
    */
   @GetMapping("/rentals")
-  public ResponseEntity<Map<String, List<RentalsResponseDto>>> list() {
+  public ResponseEntity<Map<String, List<RentalsResponseDto>>> listRentals() {
 
     List<RentalEntity> rentals = rentalService.getRentals();
 

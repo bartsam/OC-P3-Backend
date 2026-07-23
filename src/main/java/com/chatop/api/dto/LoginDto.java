@@ -3,6 +3,7 @@ package com.chatop.api.dto;
 public class LoginDto {
 
   private String email;
+
   private String password;
 
   public String getEmail() {

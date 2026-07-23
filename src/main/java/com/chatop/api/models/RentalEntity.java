@@ -1,7 +1,9 @@
 package com.chatop.api.models;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -10,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -18,19 +21,30 @@ public class RentalEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int id;
+  private Integer id;
+
   private String name;
+
   private Integer surface;
+
   private Integer price;
+
   private String picture;
+
   private String description;
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "owner_id", nullable = false)
   private UserEntity owner;
+
   @Column(name = "created_at")
   private LocalDateTime createdAt;
+
   @Column(name = "updated_at")
   private LocalDateTime updatedAt;
+
+  @OneToMany(mappedBy = "rental", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<MessageEntity> messages;
 
   public int getId() {
     return id;
