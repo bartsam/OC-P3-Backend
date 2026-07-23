@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.chatop.api.dto.RentalsRequestDto;
+import com.chatop.api.exceptions.ResourceNotFoundException;
 import com.chatop.api.models.RentalEntity;
 import com.chatop.api.models.UserEntity;
 import com.chatop.api.repositories.RentalRepository;
@@ -32,11 +33,11 @@ public class RentalService {
    * Crée et sauvegarde un nouveau rental pour l'user connecté.
    * Stocke l'image sur le serveur, puis construit et persiste l'entité.
    */
-  public RentalEntity saveRental(RentalsRequestDto rentalRequestDto, int userId) {
+  public RentalEntity saveRental(RentalsRequestDto rentalRequestDto, Integer userId) {
 
     // Récupère le propriétaire réel depuis son ID, échoue si inexistant
-    UserEntity ownerId = userRepository.findById(userId)
-        .orElseThrow(() -> new RuntimeException("User not found"));
+    UserEntity owner = userRepository.findById(userId)
+        .orElseThrow(() -> new ResourceNotFoundException("User not found: " + userId));
 
     // Sauvegarde l'image sur le disque et récupère son URL publique
     String pictureUrl = fileStorageService.storeFile(rentalRequestDto.getPicture());
@@ -48,7 +49,7 @@ public class RentalService {
     rental.setPrice(rentalRequestDto.getPrice());
     rental.setDescription(rentalRequestDto.getDescription());
     rental.setPicture(pictureUrl);
-    rental.setOwner(ownerId);
+    rental.setOwner(owner);
     rental.setCreatedAt(LocalDateTime.now());
     rental.setUpdatedAt(LocalDateTime.now());
 

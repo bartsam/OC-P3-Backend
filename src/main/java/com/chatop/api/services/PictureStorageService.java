@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.chatop.api.exceptions.FileStorageException;
+
 /**
  * Gère le stockage physique des images uploadées sur le serveur local
  */
@@ -39,7 +41,7 @@ public class PictureStorageService {
 
     // Autorise uniquement les extensions image connues
     if (originalName == null || !originalName.toLowerCase().matches(".*\\.(jpg|jpeg|png|gif)$")) {
-      throw new RuntimeException("Only pictures are allowed");
+      throw new IllegalArgumentException("Only pictures are allowed");
     }
 
     try {
@@ -58,7 +60,7 @@ public class PictureStorageService {
       // Vérifie que le fichier final reste dans le dossier autorisé
       // (anti-path-traversal)
       if (!targetFile.startsWith(uploadPath)) {
-        throw new RuntimeException("File path invalid");
+        throw new FileStorageException("File path invalid");
       }
 
       // Crée le répertoire d'upload s'il n'existe pas encore
@@ -73,7 +75,7 @@ public class PictureStorageService {
       return baseUrl + storedName;
 
     } catch (IOException e) {
-      throw new RuntimeException("Fail to save the image", e);
+      throw new FileStorageException("Fail to save the image", e);
     }
   }
 }
