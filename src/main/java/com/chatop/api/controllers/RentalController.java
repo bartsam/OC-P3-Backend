@@ -15,8 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.chatop.api.dto.RentalCreateRequestDto;
+import com.chatop.api.dto.RentalDetailResponseDto;
+import com.chatop.api.dto.RentalListResponseDto;
 import com.chatop.api.dto.RentalUpdateRequestDto;
-import com.chatop.api.dto.RentalsResponseDto;
 import com.chatop.api.models.RentalEntity;
 import com.chatop.api.models.UserEntity;
 import com.chatop.api.services.RentalService;
@@ -72,16 +73,27 @@ public class RentalController {
    * Retourne la liste de tous les rentals
    */
   @GetMapping("/rentals")
-  public ResponseEntity<Map<String, List<RentalsResponseDto>>> listRentals() {
+  public ResponseEntity<Map<String, List<RentalListResponseDto>>> getRentalList() {
 
     List<RentalEntity> rentals = rentalService.getRentals();
 
-    List<RentalsResponseDto> rentalDtos = rentals.stream()
+    List<RentalListResponseDto> rentalDtos = rentals.stream()
         // .map(entity -> RentalsResponseDto.fromEntity(entity))
-        .map(RentalsResponseDto::fromEntity)
+        .map(RentalListResponseDto::fromEntity)
         .toList();
 
     return ResponseEntity.ok(Map.of("rentals", rentalDtos));
   }
 
+  /**
+   * Retourne le détail d'un rental selon son id
+   */
+  @GetMapping("/rentals/{rentalId}")
+  public ResponseEntity<Map<String, RentalDetailResponseDto>> getRentalDetail(@PathVariable Integer rentalId) {
+
+    RentalEntity rental = rentalService.getRental(rentalId);
+    RentalDetailResponseDto rentalDto = RentalDetailResponseDto.fromEntity(rental);
+
+    return ResponseEntity.ok(Map.of("rental", rentalDto));
+  }
 }

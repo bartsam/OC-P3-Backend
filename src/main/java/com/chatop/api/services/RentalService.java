@@ -59,13 +59,6 @@ public class RentalService {
   }
 
   /**
-   * Retourne la liste de toutes les rentals enregistrées en base
-   */
-  public List<RentalEntity> getRentals() {
-    return (List<RentalEntity>) rentalRepository.findAll();
-  }
-
-  /**
    * Update un rental pour l'user connecté.
    */
   public RentalEntity updateRental(Integer rentalId, RentalUpdateRequestDto rentalUpdateRequestDto, Integer userId) {
@@ -106,4 +99,18 @@ public class RentalService {
     return rentalRepository.save(rental);
   }
 
+  /**
+   * Retourne la liste de toutes les rentals enregistrées en base
+   */
+  public List<RentalEntity> getRentals() {
+    return (List<RentalEntity>) rentalRepository.findAll();
+  }
+
+  /**
+   * Retourne un rental selon son id, échoue si inexistant
+   */
+  public RentalEntity getRental(Integer rentalId) {
+    return rentalRepository.findById(rentalId)
+        .orElseThrow(() -> new ResourceNotFoundException("Rental not found: " + rentalId));
+  }
 }

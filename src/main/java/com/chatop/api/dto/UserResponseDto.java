@@ -32,7 +32,7 @@ public class UserResponseDto {
     return dto;
   }
 
-  public int getId() {
+  public Integer getId() {
     return id;
   }
 
