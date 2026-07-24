@@ -59,7 +59,7 @@ public class SecurityConfig {
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/api/auth/**").permitAll()
             .requestMatchers("/images/**").permitAll()
-            .requestMatchers("/swagger-ui/**", "/swagger-ui").permitAll()
+            .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
             .anyRequest().authenticated())
         // Déclenche l'authentification avec token JWT sur les routes protégées
         .oauth2ResourceServer(oauth2 -> oauth2

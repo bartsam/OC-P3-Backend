@@ -23,7 +23,7 @@ public class MessageEntity {
   private String message;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "user_id", nullable = false)
+  @JoinColumn(name = "user_id", nullable = true)
   private UserEntity user;
 
   @ManyToOne(fetch = FetchType.LAZY)

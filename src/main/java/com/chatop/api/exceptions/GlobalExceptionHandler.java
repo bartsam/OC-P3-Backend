@@ -13,10 +13,13 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import io.swagger.v3.oas.annotations.Hidden;
+
 /**
  * Centralise la gestion des erreurs métier pour tous les controllers REST.
  * Ne gère pas les 401 liées au token JWT (catché par oauth2ResourceServer),
  */
+@Hidden
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 

@@ -10,11 +10,19 @@ import com.chatop.api.dto.UserResponseDto;
 import com.chatop.api.models.UserEntity;
 import com.chatop.api.services.UserService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 /**
  * Gère l'affichage des users
  */
 @RestController
 @RequestMapping("/api")
+@Tag(name = "Users", description = "Opérations liées à la consultation des utilisateurs")
 public class UserController {
 
   private final UserService userService;
@@ -26,12 +34,18 @@ public class UserController {
   /**
    * Retourne le détail d'un user selon son id
    */
+  @Operation(summary = "Récupère le détail d'un utilisateur", description = "Retourne les informations publiques d'un utilisateur à partir de son identifiant. Nécessite un token JWT valide.", security = @SecurityRequirement(name = "bearerAuth"))
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Utilisateur trouvé"),
+      @ApiResponse(responseCode = "401", description = "Non authentifié - token JWT manquant ou invalide"),
+      @ApiResponse(responseCode = "404", description = "Utilisateur introuvable")
+  })
   @GetMapping("/users/{userId}")
-  public ResponseEntity<UserResponseDto> getUserDetail(@PathVariable Integer userId) {
+  public ResponseEntity<UserResponseDto> getUserDetail(
+      @Parameter(description = "Identifiant de l'utilisateur à récupérer", example = "5") @PathVariable Integer userId) {
 
     UserEntity user = userService.getById(userId);
     return ResponseEntity.ok(UserResponseDto.fromEntity(user));
-
   }
 
 }
