@@ -120,12 +120,12 @@ public class RentalController {
       @ApiResponse(responseCode = "404", description = "Rental introuvable")
   })
   @GetMapping("/rentals/{rentalId}")
-  public ResponseEntity<Map<String, RentalDetailResponseDto>> getRentalDetail(
+  public ResponseEntity<RentalDetailResponseDto> getRentalDetail(
       @Parameter(description = "Identifiant du rental à consulter", example = "1") @PathVariable Integer rentalId) {
 
     RentalEntity rental = rentalService.getRental(rentalId);
     RentalDetailResponseDto rentalDto = RentalDetailResponseDto.fromEntity(rental);
 
-    return ResponseEntity.ok(Map.of("rental", rentalDto));
+    return ResponseEntity.ok(rentalDto);
   }
 }
