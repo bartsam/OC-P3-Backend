@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
  */
 @RestController
 @RequestMapping("/api")
-@Tag(name = "Users", description = "Opérations liées à la consultation des utilisateurs")
+@Tag(name = "User", description = "Opérations liées à la consultation d'un utilisateur")
 public class UserController {
 
   private final UserService userService;
@@ -40,7 +40,7 @@ public class UserController {
       @ApiResponse(responseCode = "401", description = "Non authentifié - token JWT manquant ou invalide"),
       @ApiResponse(responseCode = "404", description = "Utilisateur introuvable")
   })
-  @GetMapping("/users/{userId}")
+  @GetMapping("/user/{userId}")
   public ResponseEntity<UserResponseDto> getUserDetail(
       @Parameter(description = "Identifiant de l'utilisateur à récupérer", example = "5") @PathVariable Integer userId) {
 
