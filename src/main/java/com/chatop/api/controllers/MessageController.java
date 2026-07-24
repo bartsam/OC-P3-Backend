@@ -50,7 +50,7 @@ public class MessageController {
       Authentication authentication) {
 
     UserEntity currentUser = userService.getByEmail(authentication.getName());
-    messageService.saveMessage(messageRequestDto, currentUser.getId());
+    messageService.createMessage(messageRequestDto, currentUser.getId());
 
     return ResponseEntity.ok(Map.of("message", "Message send with success"));
   }

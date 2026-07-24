@@ -58,7 +58,7 @@ public class AuthController {
   public ResponseEntity<TokenResponseDto> register(@Valid @RequestBody RegisterDto registerDto) {
 
     // Persiste user en base (email vérifié + password hashé dans UserService)
-    userService.register(registerDto.getName(), registerDto.getEmail(), registerDto.getPassword());
+    userService.createUser(registerDto.getName(), registerDto.getEmail(), registerDto.getPassword());
 
     // Authentifie l'user avec les mêmes credentials
     Authentication authentication = authenticationManager.authenticate(

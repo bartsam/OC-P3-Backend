@@ -33,7 +33,7 @@ public class MessageService {
   /**
    * Crée et sauvegarde un nouveau message pour l'user connecté.
    */
-  public MessageEntity saveMessage(MessageRequestDto messageRequestDto, Integer userId) {
+  public MessageEntity createMessage(MessageRequestDto messageRequestDto, Integer userId) {
 
     // Récupère le propriétaire réel depuis son ID, échoue si inexistant
     UserEntity user = userRepository.findById(userId)

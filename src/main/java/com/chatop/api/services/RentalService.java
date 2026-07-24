@@ -22,27 +22,27 @@ public class RentalService {
 
   private final RentalRepository rentalRepository;
   private final UserRepository userRepository;
-  private final PictureStorageService fileStorageService;
+  private final PictureStorageService pictureStorageService;
 
   RentalService(RentalRepository rentalRepository, UserRepository userRepository,
-      PictureStorageService fileStorageService) {
+      PictureStorageService pictureStorageService) {
     this.rentalRepository = rentalRepository;
     this.userRepository = userRepository;
-    this.fileStorageService = fileStorageService;
+    this.pictureStorageService = pictureStorageService;
   }
 
   /**
    * Crée et sauvegarde un nouveau rental pour l'user connecté.
    * Stocke l'image sur le serveur, puis construit et persiste l'entité.
    */
-  public RentalEntity saveRental(RentalCreateRequestDto rentalCreateRequestDto, Integer userId) {
+  public RentalEntity createRental(RentalCreateRequestDto rentalCreateRequestDto, Integer userId) {
 
     // Récupère le propriétaire réel depuis son ID, échoue si inexistant
     UserEntity owner = userRepository.findById(userId)
         .orElseThrow(() -> new ResourceNotFoundException("User not found: " + userId));
 
     // Sauvegarde l'image sur le disque et récupère son URL publique
-    String pictureUrl = fileStorageService.storeFile(rentalCreateRequestDto.getPicture());
+    String pictureUrl = pictureStorageService.storePicture(rentalCreateRequestDto.getPicture());
 
     // Construit l'entité à partir des données reçues et de l'URL de l'image
     RentalEntity rental = new RentalEntity();
@@ -90,7 +90,7 @@ public class RentalService {
       rental.setDescription(rentalUpdateRequestDto.getDescription());
     }
     if (rentalUpdateRequestDto.getPicture() != null && !rentalUpdateRequestDto.getPicture().isEmpty()) {
-      String pictureUrl = fileStorageService.storeFile(rentalUpdateRequestDto.getPicture());
+      String pictureUrl = pictureStorageService.storePicture(rentalUpdateRequestDto.getPicture());
       rental.setPicture(pictureUrl);
     }
 
@@ -102,14 +102,14 @@ public class RentalService {
   /**
    * Retourne la liste de toutes les rentals enregistrées en base
    */
-  public List<RentalEntity> getRentals() {
+  public List<RentalEntity> findAllRentals() {
     return (List<RentalEntity>) rentalRepository.findAll();
   }
 
   /**
    * Retourne un rental selon son id, échoue si inexistant
    */
-  public RentalEntity getRental(Integer rentalId) {
+  public RentalEntity findRentalById(Integer rentalId) {
     return rentalRepository.findById(rentalId)
         .orElseThrow(() -> new ResourceNotFoundException("Rental not found: " + rentalId));
   }
