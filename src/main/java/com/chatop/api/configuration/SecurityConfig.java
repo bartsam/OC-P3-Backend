@@ -57,7 +57,7 @@ public class SecurityConfig {
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         // Définis les routes publiques : register, login et docs Swagger
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/api/auth/**").permitAll()
+            .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
             .requestMatchers("/images/**").permitAll()
             .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
             .anyRequest().authenticated())
