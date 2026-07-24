@@ -28,7 +28,7 @@ public class UserService {
    * Mot de passe encodé avec BCrypt
    * createdAt et updatedAt initialisés à la date courante
    */
-  public UserEntity register(String name, String email, String rawPassword) {
+  public UserEntity createUser(String name, String email, String rawPassword) {
     if (userRepository.existsByEmail(email)) {
       throw new IllegalArgumentException("Email already use");
     }
@@ -42,15 +42,6 @@ public class UserService {
     user.setCreatedAt(now);
     user.setUpdatedAt(now);
 
-    return userRepository.save(user);
-  }
-
-  /**
-   * Met à jour un user existant
-   * Rafraîchi updatedAt
-   */
-  public UserEntity update(UserEntity user) {
-    user.setUpdatedAt(LocalDateTime.now());
     return userRepository.save(user);
   }
 

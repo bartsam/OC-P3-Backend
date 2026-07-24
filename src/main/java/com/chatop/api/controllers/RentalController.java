@@ -62,7 +62,7 @@ public class RentalController {
       Authentication authentication) {
 
     UserEntity currentUser = userService.getByEmail(authentication.getName());
-    rentalService.saveRental(rentalCreateRequestDto, currentUser.getId());
+    rentalService.createRental(rentalCreateRequestDto, currentUser.getId());
 
     return ResponseEntity.ok(Map.of("message", "Rental created !"));
   }
@@ -100,7 +100,7 @@ public class RentalController {
   @GetMapping("/rentals")
   public ResponseEntity<Map<String, List<RentalListResponseDto>>> getRentalList() {
 
-    List<RentalEntity> rentals = rentalService.getRentals();
+    List<RentalEntity> rentals = rentalService.findAllRentals();
 
     List<RentalListResponseDto> rentalDtos = rentals.stream()
         // .map(entity -> RentalsResponseDto.fromEntity(entity))
@@ -123,7 +123,7 @@ public class RentalController {
   public ResponseEntity<RentalDetailResponseDto> getRentalDetail(
       @Parameter(description = "Identifiant du rental à consulter", example = "1") @PathVariable Integer rentalId) {
 
-    RentalEntity rental = rentalService.getRental(rentalId);
+    RentalEntity rental = rentalService.findRentalById(rentalId);
     RentalDetailResponseDto rentalDto = RentalDetailResponseDto.fromEntity(rental);
 
     return ResponseEntity.ok(rentalDto);

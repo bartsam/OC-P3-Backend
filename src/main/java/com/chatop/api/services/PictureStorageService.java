@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.chatop.api.exceptions.FileStorageException;
+import com.chatop.api.exceptions.PictureStorageException;
 
 /**
  * Gère le stockage physique des images uploadées sur le serveur local
@@ -31,7 +31,7 @@ public class PictureStorageService {
    * Sauvegarde l'image reçue et retourne l'URL publique à enregistrer en base.
    * Lève une exception si le fichier est absent, invalide, ou en cas d'erreur.
    */
-  public String storeFile(MultipartFile file) {
+  public String storePicture(MultipartFile file) {
     // Rejette les fichiers absents ou vides
     if (file == null || file.isEmpty()) {
       throw new IllegalArgumentException("Picture file is required");
@@ -45,22 +45,22 @@ public class PictureStorageService {
     }
 
     try {
-      // Convertit en chemin absolu et nettoie le chemin du répertoire d'upload
+      // Prépare un chemin absolu du répertoire d'upload
       Path uploadPath = Paths.get(uploadDir).toAbsolutePath().normalize();
 
       // Extrait l'extension de l'image
       String extension = originalName.substring(originalName.lastIndexOf("."));
 
-      // Nom unique avec UUID pour éviter les collisions
+      // Crée un nom unique avec UUID pour éviter les collisions
       String storedName = UUID.randomUUID() + extension;
 
-      // Construit et nettoie le chemin du fichier uploadé
+      // Construit le chemin du fichier uploadé
       Path targetFile = uploadPath.resolve(storedName).normalize();
 
-      // Vérifie que le fichier final reste dans le dossier autorisé
+      // Vérifie que le chemin final du fichier reste dans le dossier autorisé
       // (anti-path-traversal)
       if (!targetFile.startsWith(uploadPath)) {
-        throw new FileStorageException("File path invalid");
+        throw new PictureStorageException("Picture path invalid");
       }
 
       // Crée le répertoire d'upload s'il n'existe pas encore
@@ -75,7 +75,7 @@ public class PictureStorageService {
       return baseUrl + storedName;
 
     } catch (IOException e) {
-      throw new FileStorageException("Fail to save the image", e);
+      throw new PictureStorageException("Fail to save the image", e);
     }
   }
 }

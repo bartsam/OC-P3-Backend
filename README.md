@@ -87,7 +87,7 @@ Important :
 ./mvnw spring-boot:run
 ```
 
-L'application démarre sur http://localhost:3001 (port configurable dans `local.properties` via `server.port`).
+L'application démarre sur http://localhost:3001 (port configurable dans `application.properties` via `server.port`).
 
 ### 6. Vérifier le démarrage
 

@@ -90,8 +90,8 @@ public class GlobalExceptionHandler {
   /**
    * Échec lors du stockage d'un upload (disque plein, chemin invalide) → 500
    */
-  @ExceptionHandler(FileStorageException.class)
-  public ResponseEntity<Map<String, String>> handleFileStorage(FileStorageException ex) {
+  @ExceptionHandler(PictureStorageException.class)
+  public ResponseEntity<Map<String, String>> handleFileStorage(PictureStorageException ex) {
     logger.error("File storage failed", ex);
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
         .body(Map.of("message", "Failed to save the file"));
