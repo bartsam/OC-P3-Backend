@@ -14,7 +14,6 @@ import com.chatop.api.dto.LoginDto;
 import com.chatop.api.dto.RegisterDto;
 import com.chatop.api.dto.TokenResponseDto;
 import com.chatop.api.dto.UserResponseDto;
-import com.chatop.api.models.UserEntity;
 import com.chatop.api.services.JWTService;
 import com.chatop.api.services.UserService;
 
@@ -38,7 +37,8 @@ public class AuthController {
   private final AuthenticationManager authenticationManager;
   private final UserService userService;
 
-  public AuthController(JWTService jwtService, AuthenticationManager authenticationManager, UserService userService) {
+  public AuthController(JWTService jwtService, AuthenticationManager authenticationManager,
+      UserService userService) {
     this.jwtService = jwtService;
     this.authenticationManager = authenticationManager;
     this.userService = userService;
@@ -103,8 +103,6 @@ public class AuthController {
   @GetMapping("/me")
   public ResponseEntity<UserResponseDto> me(Authentication authentication) {
 
-    // Authentication validé à partir du token envoyé dans le header
-    UserEntity user = userService.getByEmail(authentication.getName());
-    return ResponseEntity.ok(UserResponseDto.fromEntity(user));
+    return ResponseEntity.ok(userService.getByEmail(authentication.getName()));
   }
 }

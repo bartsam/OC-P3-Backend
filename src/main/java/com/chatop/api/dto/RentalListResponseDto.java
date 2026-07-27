@@ -2,7 +2,6 @@ package com.chatop.api.dto;
 
 import java.time.LocalDateTime;
 
-import com.chatop.api.models.RentalEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -43,20 +42,6 @@ public class RentalListResponseDto {
   @JsonProperty("updated_at")
   private LocalDateTime updatedAt;
 
-  public static RentalListResponseDto fromEntity(RentalEntity rental) {
-    RentalListResponseDto dto = new RentalListResponseDto();
-    dto.id = rental.getId();
-    dto.name = rental.getName();
-    dto.surface = rental.getSurface();
-    dto.price = rental.getPrice();
-    dto.picture = rental.getPicture();
-    dto.description = rental.getDescription();
-    dto.ownerId = rental.getOwner().getId();
-    dto.createdAt = rental.getCreatedAt();
-    dto.updatedAt = rental.getUpdatedAt();
-    return dto;
-  }
-
   public Integer getId() {
     return id;
   }
@@ -91,5 +76,41 @@ public class RentalListResponseDto {
 
   public LocalDateTime getUpdatedAt() {
     return updatedAt;
+  }
+
+  public void setId(Integer id) {
+    this.id = id;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public void setSurface(Integer surface) {
+    this.surface = surface;
+  }
+
+  public void setPrice(Integer price) {
+    this.price = price;
+  }
+
+  public void setPicture(String picture) {
+    this.picture = picture;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public void setOwnerId(Integer ownerId) {
+    this.ownerId = ownerId;
+  }
+
+  public void setCreatedAt(LocalDateTime createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  public void setUpdatedAt(LocalDateTime updatedAt) {
+    this.updatedAt = updatedAt;
   }
 }

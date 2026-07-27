@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.chatop.api.dto.UserResponseDto;
-import com.chatop.api.models.UserEntity;
 import com.chatop.api.services.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,8 +43,7 @@ public class UserController {
   public ResponseEntity<UserResponseDto> getUserDetail(
       @Parameter(description = "Identifiant de l'utilisateur à récupérer", example = "5") @PathVariable Integer userId) {
 
-    UserEntity user = userService.getById(userId);
-    return ResponseEntity.ok(UserResponseDto.fromEntity(user));
+    return ResponseEntity.ok(userService.getById(userId));
   }
 
 }

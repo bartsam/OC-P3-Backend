@@ -3,7 +3,6 @@ package com.chatop.api.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.chatop.api.models.RentalEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -44,20 +43,6 @@ public class RentalDetailResponseDto {
   @JsonFormat(pattern = "yyyy/MM/dd")
   @JsonProperty("updated_at")
   private LocalDateTime updatedAt;
-
-  public static RentalDetailResponseDto fromEntity(RentalEntity rental) {
-    RentalDetailResponseDto dto = new RentalDetailResponseDto();
-    dto.id = rental.getId();
-    dto.name = rental.getName();
-    dto.surface = rental.getSurface();
-    dto.price = rental.getPrice();
-    dto.description = rental.getDescription();
-    dto.picture = rental.getPicture() != null ? List.of(rental.getPicture()) : List.of();
-    dto.ownerId = rental.getOwner().getId();
-    dto.createdAt = rental.getCreatedAt();
-    dto.updatedAt = rental.getUpdatedAt();
-    return dto;
-  }
 
   public Integer getId() {
     return id;
