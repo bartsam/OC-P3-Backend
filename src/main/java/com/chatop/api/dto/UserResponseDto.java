@@ -2,7 +2,6 @@ package com.chatop.api.dto;
 
 import java.time.LocalDateTime;
 
-import com.chatop.api.models.UserEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -30,16 +29,6 @@ public class UserResponseDto {
   @JsonProperty("updated_at")
   private LocalDateTime updatedAt;
 
-  public static UserResponseDto fromEntity(UserEntity user) {
-    UserResponseDto dto = new UserResponseDto();
-    dto.id = user.getId();
-    dto.name = user.getName();
-    dto.email = user.getEmail();
-    dto.createdAt = user.getCreatedAt();
-    dto.updatedAt = user.getUpdatedAt();
-    return dto;
-  }
-
   public Integer getId() {
     return id;
   }
@@ -58,5 +47,25 @@ public class UserResponseDto {
 
   public LocalDateTime getUpdatedAt() {
     return updatedAt;
+  }
+
+  public void setId(Integer id) {
+    this.id = id;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public void setCreatedAt(LocalDateTime createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  public void setUpdatedAt(LocalDateTime updatedAt) {
+    this.updatedAt = updatedAt;
   }
 }

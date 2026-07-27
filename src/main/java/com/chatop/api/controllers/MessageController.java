@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.chatop.api.dto.MessageRequestDto;
-import com.chatop.api.models.UserEntity;
 import com.chatop.api.services.MessageService;
 import com.chatop.api.services.UserService;
 
@@ -49,8 +48,8 @@ public class MessageController {
       @Valid @RequestBody MessageRequestDto messageRequestDto,
       Authentication authentication) {
 
-    UserEntity currentUser = userService.getByEmail(authentication.getName());
-    messageService.createMessage(messageRequestDto, currentUser.getId());
+    Integer currentUserId = userService.getIdByEmail(authentication.getName());
+    messageService.createMessage(messageRequestDto, currentUserId);
 
     return ResponseEntity.ok(Map.of("message", "Message send with success"));
   }

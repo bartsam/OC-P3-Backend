@@ -18,8 +18,6 @@ import com.chatop.api.dto.RentalCreateRequestDto;
 import com.chatop.api.dto.RentalDetailResponseDto;
 import com.chatop.api.dto.RentalListResponseDto;
 import com.chatop.api.dto.RentalUpdateRequestDto;
-import com.chatop.api.models.RentalEntity;
-import com.chatop.api.models.UserEntity;
 import com.chatop.api.services.RentalService;
 import com.chatop.api.services.UserService;
 
@@ -61,8 +59,8 @@ public class RentalController {
       @Valid @ModelAttribute RentalCreateRequestDto rentalCreateRequestDto,
       Authentication authentication) {
 
-    UserEntity currentUser = userService.getByEmail(authentication.getName());
-    rentalService.createRental(rentalCreateRequestDto, currentUser.getId());
+    Integer currentUserId = userService.getIdByEmail(authentication.getName());
+    rentalService.createRental(rentalCreateRequestDto, currentUserId);
 
     return ResponseEntity.ok(Map.of("message", "Rental created !"));
   }
@@ -83,8 +81,8 @@ public class RentalController {
       @Valid @ModelAttribute RentalUpdateRequestDto rentalUpdateRequestDto,
       Authentication authentication) {
 
-    UserEntity currentUser = userService.getByEmail(authentication.getName());
-    rentalService.updateRental(rentalId, rentalUpdateRequestDto, currentUser.getId());
+    Integer currentUserId = userService.getIdByEmail(authentication.getName());
+    rentalService.updateRental(rentalId, rentalUpdateRequestDto, currentUserId);
 
     return ResponseEntity.ok(Map.of("message", "Rental updated !"));
   }
@@ -100,13 +98,7 @@ public class RentalController {
   @GetMapping("/rentals")
   public ResponseEntity<Map<String, List<RentalListResponseDto>>> getRentalList() {
 
-    List<RentalEntity> rentals = rentalService.findAllRentals();
-
-    List<RentalListResponseDto> rentalDtos = rentals.stream()
-        // .map(entity -> RentalsResponseDto.fromEntity(entity))
-        .map(RentalListResponseDto::fromEntity)
-        .toList();
-
+    List<RentalListResponseDto> rentalDtos = rentalService.findAllRentals();
     return ResponseEntity.ok(Map.of("rentals", rentalDtos));
   }
 
@@ -122,10 +114,7 @@ public class RentalController {
   @GetMapping("/rentals/{rentalId}")
   public ResponseEntity<RentalDetailResponseDto> getRentalDetail(
       @Parameter(description = "Identifiant du rental à consulter", example = "1") @PathVariable Integer rentalId) {
-
-    RentalEntity rental = rentalService.findRentalById(rentalId);
-    RentalDetailResponseDto rentalDto = RentalDetailResponseDto.fromEntity(rental);
-
+    RentalDetailResponseDto rentalDto = rentalService.findRentalById(rentalId);
     return ResponseEntity.ok(rentalDto);
   }
 }
